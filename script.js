@@ -27,6 +27,9 @@ async function getClue(location) {
   //asking AI to generate the clue
   const prompt = `You are a fun scavenger hunt guide. Give a playful, 1-sentence clue for the location: ${location}. Don't mention the name directly.`;
   // this is our prompt that we ask openai.
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
   try {
     // getting a data by using try and catch (important for retrieving data) function and ask
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
