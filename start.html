@@ -39,6 +39,19 @@
             <div id="controls">
             <div id="scoreBox">Current Wins: <span id="wins">0</span> | High Score:<span id="highScore">0</span></div>
           <div id="clueBox">Finding your location...</div>
+
+          <div class="clue-box">
+            <strong>📍 How to Play:</strong> Use the clue to figure out the
+            location, then physically go there! You must be within 50 meters to
+            submit your guess.
+          </div>
+                
+          <button id="submitBtn" class="btn" disabled>Submit Guess</button>
+          <div id="message"></div>
+          <div id="gameOverButtons" style="display: none">
+            <button id="playAgainBtn" class="btn">Play Again?</button>
+            <button id="quitBtn" class="btn btn-secondary">Quit</button>
+          </div>
         </section>
 
 
