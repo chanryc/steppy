@@ -14,34 +14,25 @@ document.getElementById("highScore").textContent = highScore;
 
 // clue generator using AI
 async function getClue(location) {
-  // prompt AI
   const prompt = `You are a fun scavenger hunt guide. Give a playful, 1-sentence clue for the location: ${location}. Don't mention the name directly.`;
   
   try {
-    // get data using try and catch
-    const response = await fetch("https://api.openai.com/v1/chat/completions",{ // await so it's step by step
-      method: "POST", // send n create new data to server using POST
-      headers: {
-        "Content-Type": "application/json",
-
-        Authorization:
-          "Bearer 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",
-      },
+    // Call YOUR backend, not OpenAI directly
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        // converting js to json to string and send it to server (API)
-        // specify ai model
-        model: "gpt-4o-mini",
-        messages: [{role: "user", content: prompt}],
-        max_tokens: 50, // limit of prompts that model can create
-      }),
+        model: 'gpt-4o-mini',
+        messages: [{role: 'user', content: prompt}],
+        max_tokens: 50
+      })
     });
 
-    const data = await response.json(); // convert json to smt js readable
-    const clue = data.choices[0].message.content; 
-    document.getElementById("clueBox").textContent = `🔍 ${clue}`;
+    const data = await response.json();
+    const clue = data.choices[0].message.content;
+    document.getElementById('clueBox').textContent = `🔍 ${clue}`;
   } catch (error) {
-    // have to fix, lots of locations are showing as this
-    document.getElementById("clueBox").textContent = `Your clue: Find ${location}!`;
+    document.getElementById('clueBox').textContent = `Your clue: Find ${location}!`;
   }
 }
 
