@@ -2,11 +2,15 @@
 const map = L.map("map").setView([42.3601, -71.0589], 15);
 
 // add openstreetmap tiles
-
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {attribution: "&copy; OpenStreetMap contributors",}).addTo(map);
 
 // vars
+let selectedLandmark = null;
 let userLocation = null;
+let wins = 0;
+let highScore = localStorage. getItem("highScore") || 0; store highest score in local
 let landmarksData = []; // list of landmarks
+document.getElementById("highScore").textContent = highScore;
 
 // clue generator using AI
 async function getClue(location) {
@@ -18,10 +22,7 @@ async function getClue(location) {
     const response = await fetch("https://api.openai.com/v1/chat/completions",{ // await so it's step by step
       method: "POST", // send n create new data to server using POST
       headers: {
-        "Content-Type": "application/json",
-
-        Authorization:
-          "Bearer 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",
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         // converting js to json to string and send it to server (API)
@@ -188,4 +189,14 @@ document.getElementById("playAgainBtn").addEventListener("click", () => {
   wins = 0; // reset wins
   document.getElementById("wins").textContent = wins; // update wins
   startNewRound(); // start new round
+});
+
+// quit
+document.getElementById("quitBtn").addEventListener("click", () => {
+  const messageElt = document.getElementById("message");
+  messageElt.textContent = `Game Over! Final Score: ${wins} wins. High Score: ${highScore}`;
+  messageElt.className = "";
+  document.getElementById("gameOverButtons").style.display = "none";
+  document.getElementById("submitBtn").style.display = "none";
+  document.getElementById("clueBox").textContent = "Thanks for playing!";
 });

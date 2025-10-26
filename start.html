@@ -57,7 +57,21 @@
 
         <div id="map"></div>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    
+        <script>
+        async function askAI(question) {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+            model: 'gpt-4',
+            messages: [{ role: 'user', content: question }]
+            })
+        });
+        
+        const data = await response.json();
+        console.log(data);
+        }
+        </script>
 
 
     </body>
