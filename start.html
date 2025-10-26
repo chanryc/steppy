@@ -45,52 +45,7 @@
         <div id="map"></div>
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     
-<script>
-      const bcCenter = [42.3359, -71.1685];
-      const bcBounds = L.latLngBounds([42.3332, -71.1728], [42.3386, -71.1653]);
 
-      const map = L.map("map", {
-        center: bcCenter,
-        zoom: 17,
-        minZoom: 16,
-        maxZoom: 19,
-        maxBounds: bcBounds,
-        maxBoundsViscosity: 1.0,
-        zoomControl: false,
-      });
-
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "&copy; OpenStreetMap contributors",
-      }).addTo(map);
-
-      const userMarker = L.circleMarker(bcCenter, {
-        radius: 8,
-        color: "#1e90ff",
-        fillColor: "#1e90ff",
-        fillOpacity: 0.8,
-      }).addTo(map);
-
-      L.rectangle(bcBounds, { color: "#6c5ce7", weight: 1 }).addTo(map);
-
-      if ("geolocation" in navigator) {
-        navigator.geolocation.watchPosition(
-          (pos) => {
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
-            userMarker.setLatLng([lat, lon]);
-            if (bcBounds.contains([lat, lon])) {
-              map.setView([lat, lon]);
-            }
-          },
-          (err) => console.error("GPS error:", err.message),
-          { enableHighAccuracy: true }
-        );
-      } else {
-        alert("Geolocation not supported.");
-      }
-
-</script>
 
     </body>
 </html> 
