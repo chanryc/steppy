@@ -1,26 +1,191 @@
-async function getWeather(lat, lon) {
-    const res = await fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&temperature_unit=fahrenheit`
-    );
-    const data = await res.json();
-    return data.current_weather.temperature;
+// leaflet map
+const map = L.map("map").setView([42.3601, -71.0589], 15);
+
+// add openstreetmap tiles
+
+
+// vars
+let userLocation = null;
+let landmarksData = []; // list of landmarks
+
+// clue generator using AI
+async function getClue(location) {
+  // prompt AI
+  const prompt = `You are a fun scavenger hunt guide. Give a playful, 1-sentence clue for the location: ${location}. Don't mention the name directly.`;
+  
+  try {
+    // get data using try and catch
+    const response = await fetch("https://api.openai.com/v1/chat/completions",{ // await so it's step by step
+      method: "POST", // send n create new data to server using POST
+      headers: {
+        "Content-Type": "application/json",
+
+        Authorization:
+          "Bearer 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",
+      },
+      body: JSON.stringify({
+        // converting js to json to string and send it to server (API)
+        // specify ai model
+        model: "gpt-4o-mini",
+        messages: [{role: "user", content: prompt}],
+        max_tokens: 50, // limit of prompts that model can create
+      }),
+    });
+
+    const data = await response.json(); // convert json to smt js readable
+    const clue = data.choices[0].message.content; 
+    document.getElementById("clueBox").textContent = `🔍 ${clue}`;
+  } catch (error) {
+    // have to fix, lots of locations are showing as this
+    document.getElementById("clueBox").textContent = `Your clue: Find ${location}!`;
+  }
 }
 
-window.addEventListener("load", () => {
-  if ("geolocation" in navigator) {
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      const lat = pos.coords.latitude;
-      const lon = pos.coords.longitude;
+// calculate distance
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371e3; // Earth radius in meters
+  const φ1 = (lat1 * Math.PI) / 180;
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+  const Δλ = ((lon2 - lon1) * Math.PI) / 180;
 
-      try {
-        const temp = await getWeather(lat, lon);
-        document.getElementById("temp-value").textContent = temp.toFixed(1);
-      } catch (err) {
-        console.error("Weather API error:", err);
-        document.getElementById("temp-value").textContent = "Error";
-      }
-    });
-  } else {
-    alert("Geolocation is not supported by this browser.");
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c; // distance in meters
+}
+
+// new round
+function startNewRound() {
+  // clear previous markers and readd user marker
+  map.eachLayer((layer) => {
+    if (layer instanceof L.Marker) {
+      map.removeLayer(layer);
+    }
+  });
+
+  // readd user marker
+  if (userLocation) {
+    L.marker([userLocation.lat, userLocation.lon], 15).addTo(map).bindPopup("You are here :)");
   }
+
+  // new landmark
+  if (landmarksData.length > 0) {
+    var randInd = Math.floor(Math.random() * landmarksData.length);
+    selectedLandmark = landmarksData[randInd];
+
+    var landmarkName = selectedLandmark.tags.name; // get landmark name
+    // chat api clue generator
+    getClue(landmarkName);
+
+    // Add markers for all landmarks
+    landmarksData.forEach((place) => {
+      const name = place.tags.name;
+      const type = place.tags.tourism || place.tags.historic || place.tags.amenity || "unknown";
+
+      L.marker([place.lat, place.lon]).addTo(map).bindPopup(`<b>${name}</b><br>${type}`); // get rid of b
+    });
+
+    document.getElementById("submitBtn").disabled = false;
+    document.getElementById("message").textContent = "";
+    document.getElementById("gameOverButtons").style.display = "none";
+  }
+}
+
+// user location
+navigator.geolocation.getCurrentPosition(
+  async (pos) => {
+    const lat = pos.coords.latitude;
+    const lon = pos.coords.longitude;
+    userLocation = {lat, lon};
+
+    // zoom on user
+    map.setView([lat, lon], 15); // set view on user location
+    L.marker([lat, lon]).addTo(map).bindPopup("You are here :)");
+
+    // overpass API query (landmarks)
+    const query = `
+    [out:json];
+    ( 
+      node(around:1609,${lat},${lon})[tourism]; 
+      node(around:1609,${lat},${lon})[historic];
+      node(around:1609,${lat},${lon})[amenity~"library|place_of_worship|theatre|park"];
+    );
+    out;`;
+
+    const response = await fetch("https://overpass-api.de/api/interpreter", {
+      method: "POST",
+      body: query,
+    });
+    // json to js obj
+    const data = await response.json();
+
+    // filtering only landmarks with names
+    landmarksData = data.elements.filter((place) => place.tags.name);
+
+    if (landmarksData.length === 0) {
+      document.getElementById("clueBox").textContent =
+        "No landmarks found nearby. Try a different location!";
+      return;
+    }
+
+    startNewRound();
+  },
+  (error) => {
+    alert("Could not get your location. Please enable location services.");
+  }
+);
+
+// submit button
+document.getElementById("submitBtn").addEventListener("click", () => {
+  if (!selectedLandmark || !userLocation) return;
+
+  // take user location and selected landmark and calculate distance
+  const distance = calculateDistance(userLocation.lat, userLocation.lon, selectedLandmark.lat, selectedLandmark.lon);
+
+  // name tag
+  const locationName = selectedLandmark.tags.name;
+
+  const messageElt = document.getElementById("message");
+
+  // corrects if within distance
+  if (distance <= 50) {
+    // add to win count n update wins text
+    wins++;
+    document.getElementById("wins").textContent = wins;
+
+    // update highscore if wins >
+    if (wins > highScore) {
+      highScore = wins;
+
+      // update highscore and highscore text
+      localStorage.setItem("highScore", highScore);
+      document.getElementById("highScore").textContent = highScore;
+    }
+
+    messageElt.textContent = `🎉 Congrats! The location was ${locationName}!`;
+    messageElt.className = "success";
+
+    // auto start new round after certain time
+    document.getElementById("submitBtn").disabled = true;
+    setTimeout(() => {
+      startNewRound();
+    }, 3000);
+  } else {
+    
+    // loss
+    messageElt.textContent = `❌ Sorry! The location was ${locationName}. Distance: ${Math.round(distance)}m away.`;
+    messageElt.className = "fail";
+    document.getElementById("submitBtn").disabled = true;
+    document.getElementById("gameOverButtons").style.display = "block";
+  }
+});
+
+// play again btn
+document.getElementById("playAgainBtn").addEventListener("click", () => {
+  wins = 0; // reset wins
+  document.getElementById("wins").textContent = wins; // update wins
+  startNewRound(); // start new round
 });
