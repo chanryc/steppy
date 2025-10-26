@@ -21,5 +21,3 @@ We learned how to use APIs, as well as leaflet.js to include maps on our web app
 
 ## What's next for Steppy!
  There are many improvements that can be made for this project. As an expansion to the project, we could possibly implement a database system that allows for users to log in and sign up. We can then utilize the user login system and potentially create a leaderboard to motivate users to compete and explore numerous places around!
-
-[GitHub Repo](https://github.com/chanryc/steppy)
