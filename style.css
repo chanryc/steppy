@@ -47,3 +47,16 @@
   transition: 0.3s;
   background: var(--steppy-red)
 }
+
+#map-section {
+  background: #fafafa;
+  padding: 60px 0;
+}
+
+#map {
+  width: 70%;
+  height: 300px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+}

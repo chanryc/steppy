@@ -50,6 +50,46 @@
 
     <!-- Link to external JavaScript -->
     <script src="script.js"></script>
+    <!-- Leaflet JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+  const bcCenter = [42.3359, -71.1685];
+
+  const map = L.map("map", {
+    center: bcCenter,
+    zoom: 17,
+    zoomControl: false
+  });
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "&copy; OpenStreetMap contributors"
+  }).addTo(map);
+
+  const userMarker = L.circleMarker(bcCenter, {
+    radius: 7,
+    color: "#1e90ff",
+    fillColor: "#1e90ff",
+    fillOpacity: 0.8,
+  }).addTo(map);
+
+  if ("geolocation" in navigator) {
+    navigator.geolocation.watchPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        userMarker.setLatLng([latitude, longitude]);
+        map.setView([latitude, longitude]);
+      },
+      (err) => console.error("GPS Error:", err.message),
+      { enableHighAccuracy: true }
+    );
+  } else {
+    alert("Geolocation not supported.");
+  }
+</script>
   </body>
+  
   
 </html>
