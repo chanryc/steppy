@@ -3,6 +3,10 @@
   --steppy-gold: #d4a574;
 }
 
+body {
+  font-family: Lexend, sans-serif !important;
+}
+
 .navbar-brand img {
   height: 70px;
 }
