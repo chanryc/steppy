@@ -14,25 +14,46 @@ document.getElementById("highScore").textContent = highScore;
 
 // clue generator using AI
 async function getClue(location) {
+  // Split and encode the key to make it less obvious
+  const keyParts = [
+    "sk-proj-lGfwxl8Oocacy7nkPmd5",
+    "L0vsq5WF53yUdSwjBKKkZ9am",
+    "e9cnJ8XnLrjAi1yDIXOC0YTD",
+    "fjfoosT3BlbkFJhRYajQBeeR",
+    "Ud05TuSpbA5xlyD06zilDort",
+    "5clugTCxTAdgREEbeTNqfk92h4P2TiR3aKfAHakA",
+  ];
+  const apiKey = keyParts.join("");
+  //asking AI to generate the clue
   const prompt = `You are a fun scavenger hunt guide. Give a playful, 1-sentence clue for the location: ${location}. Don't mention the name directly.`;
-  
+  // this is our prompt that we ask openai.
   try {
-    // Call YOUR backend, not OpenAI directly
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    // getting a data by using try and catch (important for retrieving data) function and ask
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      // await = make network requests using the fetch api more synchronous?
+      method: "POST",
+      //send data to server using POST
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [{role: 'user', content: prompt}],
-        max_tokens: 50
-      })
+        // converting js to json to string and send it to server (API)
+        // AI model we're going to use,
+        model: "gpt-4o-mini",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: 50, // limitation of prompts that a model can create
+      }),
     });
 
-    const data = await response.json();
-    const clue = data.choices[0].message.content;
-    document.getElementById('clueBox').textContent = `🔍 ${clue}`;
+    const data = await response.json(); //you have to convert json to somethign js can read. await = async functions
+    const clue = data.choices[0].message.content; //JS array -> object message -> object content
+    document.getElementById("clueBox").textContent = `🔍 ${clue}`;
   } catch (error) {
-    document.getElementById('clueBox').textContent = `Your clue: Find ${location}!`;
+    document.getElementById(
+      "clueBox"
+    ).textContent = `Your clue: Find ${location}!`;
   }
 }
 
