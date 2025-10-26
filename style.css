@@ -1,3 +1,8 @@
+:root {
+  --steppy-red: #c41e3a;
+  --steppy-gold: #d4a574;
+}
+
 .navbar-brand img {
   height: 70px;
 }
@@ -12,9 +17,23 @@
   background: linear-gradient(135deg, #fef5f1 0%, #fff 100%);
   padding: 80px 0;
   text-align: center;
-
+}
 #map-section {
   background: #fafafa;
   padding: 60px 0;
->>>>>>> 15586aecf9d07eb9cf7b30d86e2984a708bba348
+}
+
+.btn{
+  border-radius: 25px;
+  padding: 0.5rem 2rem;
+  font-weight: 600;
+  transition: 0.3s;
+  color: var(--steppy-red);
+  border: 2px solid var(--steppy-red);
+}
+
+
+.btn:hover {
+  background: var(--steppy-red);
+  color: #fff;
 }
