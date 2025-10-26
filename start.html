@@ -17,11 +17,28 @@
     </head>
 
     <body>
-        <section id="hunter">
-            <h1 class="section-title">AI Scavenger Hunt</h1>
+        <!-- nav -->
+        <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="main.html">
+            <img src="steppy_logo.png" class="img-fluid" alt="Logo">
+            </a>
+
+            <div class="d-flex gap-3">
+            <a href="login.html" class="btn_login">
+            Login
+            </a>
+            <a href="signup.html" class="btn_signup">
+            Sign Up
+            </a>
+        </div>
+        </div>
+        </nav>
+        <section id="hunter" class="center-align">
+            <h1 class="section-title m-around">Scavenger Hunt</h1>
             <div class="controls">
             <p>Current Temperature: <span id="temp-value">--</span>°F</p>
-            <button id="start-btn" class="btn-start">Generate Hunt</button>
+            <button id="start-btn" class="btn-start m-around">Generate Hunt</button>
         </section>
 
 

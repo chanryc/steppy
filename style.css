@@ -64,3 +64,11 @@ body {
   border-radius: 20px;
   overflow: hidden;
 }
+
+.center-align {
+  text-align: center;
+}
+
+.m-around {
+  margin: 20px;
+}
