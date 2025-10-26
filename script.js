@@ -8,7 +8,7 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {attribution: 
 let selectedLandmark = null;
 let userLocation = null;
 let wins = 0;
-let highScore = localStorage. getItem("highScore") || 0; store highest score in local
+let highScore = localStorage.getItem("highScore") || 0;
 let landmarksData = []; // list of landmarks
 document.getElementById("highScore").textContent = highScore;
 
@@ -181,7 +181,7 @@ document.getElementById("submitBtn").addEventListener("click", () => {
     
     // loss
     messageElt.textContent = `❌ Sorry! The location was ${locationName}. Distance: ${Math.round(distance)}m away.`;
-    messageElt.className = "fail";
+    messageElt.className = "failure";
     document.getElementById("submitBtn").disabled = true;
     document.getElementById("gameOverButtons").style.display = "block";
   }

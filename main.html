@@ -11,6 +11,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   </head>
 
   <body>
@@ -33,21 +36,80 @@
     </nav>
 
     <!-- hero -->
-    <section class="hero-section">
-      <div class="container">
-        <h1>Turn Your Fitness Into An Adventure</h1>
-        <p>Complete scavenger hunts and venture with Steppy.</p>
-        <a href="start.html"> <button class="btn-start btn-lg px-5">Start Your Hunt</button> </a>
-      </div>
-    </section>
+   
+    <div class="container py-5 hero-section">
+      <h1 style="color: #c41e3a"></h1style><b>Turn Your Fitness Into An Adventure</b></h1>
+      <p>Complete scavenger hunts and venture with Steppy.</p>
+      <a href="start.html"> <button class="btn-start btn-lg px-5">Start Your Hunt</button> </a>
+    </div>
     
-    <section id="map-section">
+    <!-- previous Hunts Section -->
+    <section class="">
       <div class="container">
-        <h2 class="section-title">Boston College Campus Map</h2>
-        <div id="map"></div>
-      </div>
-    </section>
-    
+        <h2 class="section-title">Previous Hunts</h2>
+        <div class="row g-4">
+          <!-- card 1 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="hunt-card">
+              <span class="hunt-badge">COMPLETED</span>
+              <h3 class="hunt-title">Downtown Discovery</h3>
+              <div class="hunt-date">📅 October 20, 2025</div>
+              <div class="hunt-stats">
+                <div class="stat">
+                  <div class="stat-label">Distance</div>
+                  <div class="stat-value">
+                    3.2 <span class="stat-unit">miles</span>
+                  </div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Steps</div>
+                  <div class="stat-value">6,840</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- card 2 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="hunt-card">
+              <span class="hunt-badge">COMPLETED</span>
+              <h3 class="hunt-title">Park Explorer</h3>
+              <div class="hunt-date">📅 October 18, 2025</div>
+              <div class="hunt-stats">
+                <div class="stat">
+                  <div class="stat-label">Distance</div>
+                  <div class="stat-value">
+                    2.7 <span class="stat-unit">miles</span>
+                  </div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Steps</div>
+                  <div class="stat-value">5,760</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- card 3 -->
+          <div class="col-md-6 col-lg-4">
+            <div class="hunt-card">
+              <span class="hunt-badge">COMPLETED</span>
+              <h3 class="hunt-title">Waterfront Walk</h3>
+              <div class="hunt-date">📅 October 15, 2025</div>
+              <div class="hunt-stats">
+                <div class="stat">
+                  <div class="stat-label">Distance</div>
+                  <div class="stat-value">
+                    4.1 <span class="stat-unit">miles</span>
+                  </div>
+                </div>
+                <div class="stat">
+                  <div class="stat-label">Steps</div>
+                  <div class="stat-value">8,740</div>
+                </div>
+              </div>
+            </div>
+          </div>
     <!-- Footer -->
     <footer></footer>
 

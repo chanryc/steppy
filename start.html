@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
     <title>Steppy Scavenger Hunt</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-        
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     </head>
 
     <body>
@@ -35,9 +35,9 @@
         </div>
         </nav>
         <section id="hunter" class="center-align">
-            <h1 class="section-title m-around">Scavenger Hunt</h1>
             <div id="controls">
-            <div id="scoreBox">Current Wins: <span id="wins">0</span> | High Score:<span id="highScore">0</span></div>
+            <h1 class="section-title m-around" >Scavenger Hunt</h1>
+            <div id="scoreBox">Current Wins: <span id="wins">0</span> | High Score: <span id="highScore">0</span></div>
           <div id="clueBox">Finding your location...</div>
 
           <div class="clue-box">
@@ -52,27 +52,9 @@
             <button id="playAgainBtn" class="btn">Play Again?</button>
             <button id="quitBtn" class="btn btn-secondary">Quit</button>
           </div>
+          <div id="map"></div>
         </section>
-
-
-        <div id="map"></div>
-        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        <script>
-        async function askAI(question) {
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-            model: 'gpt-4',
-            messages: [{ role: 'user', content: question }]
-            })
-        });
-        
-        const data = await response.json();
-        console.log(data);
-        }
-        </script>
-
+        <script src="script.js"></script>
 
     </body>
 </html> 
