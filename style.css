@@ -72,3 +72,11 @@ body {
 .m-around {
   margin: 20px;
 }
+.clue-box {
+  background: #fff3cd;
+  padding: 10px;
+  margin: 10px auto;
+  max-width: 600px;
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+}
